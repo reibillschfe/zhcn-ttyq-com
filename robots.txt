@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://reibillschfe.github.io/zhcn-ttyq-com/sitemap.xml

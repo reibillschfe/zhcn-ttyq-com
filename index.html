@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>天天盈球 · 赛事数据知识库</title>
+    <style>
+        /* 全局重置 & 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            background: #f7fafc;
+            color: #1f2937;
+            line-height: 1.6;
+            padding: 1rem 1rem 2.5rem;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        /* 顶部标识 / Hero 简约感 */
+        .hero-tag {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 1.2rem 0 1rem;
+            border-bottom: 2px solid #d1e7e0;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #0f766e;
+        }
+
+        .hero-sub {
+            font-size: 0.9rem;
+            color: #5b6876;
+            background: #e9f3f0;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        /* 目录感网格 ———— 卡片为主 */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+            margin: 1.8rem 0 2.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.6rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 45, 55, 0.04);
+            border: 1px solid #e2edec;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.08);
+            border-color: #b6d3ce;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #115e59;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card h3::before {
+            content: "▹";
+            color: #14b8a6;
+            font-weight: 400;
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        .card p, .card li {
+            font-size: 0.95rem;
+            color: #2d3c4b;
+            margin-top: 0.3rem;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0.2rem;
+        }
+
+        .card ul li {
+            position: relative;
+            padding-left: 1.4rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .card ul li::before {
+            content: "•";
+            color: #5baba1;
+            font-weight: 700;
+            position: absolute;
+            left: 0.1rem;
+            top: -0.05rem;
+        }
+
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 0.7rem;
+            margin-top: 0.8rem;
+        }
+
+        .badge {
+            background: #e4f0ed;
+            color: #0a5c54;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border: 1px solid #c6ddd6;
+        }
+
+        /* 说明与提示区 ———— 双列 */
+        .info-pair {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 2.2rem 0;
+        }
+
+        .info-block {
+            background: #ffffffd9;
+            backdrop-filter: blur(2px);
+            border-radius: 18px;
+            padding: 1.6rem 1.4rem;
+            border-left: 4px solid #2b9b8a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .info-block h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0b5d56;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-block h4 span {
+            background: #d4eae4;
+            border-radius: 30px;
+            padding: 0 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #16635a;
+        }
+
+        .info-block p {
+            font-size: 0.95rem;
+            color: #2c3d4b;
+            margin-top: 0.2rem;
+        }
+
+        .info-block .small-note {
+            font-size: 0.85rem;
+            color: #5d717b;
+            border-top: 1px dashed #c1d6d0;
+            margin-top: 0.8rem;
+            padding-top: 0.6rem;
+        }
+
+        /* 相关链接 & 摘要faq */
+        .faq-mini {
+            background: white;
+            border-radius: 24px;
+            padding: 1.6rem 1.5rem 1.8rem;
+            border: 1px solid #d0e1dc;
+            margin: 2rem 0 1.2rem;
+        }
+
+        .faq-mini h5 {
+            font-weight: 600;
+            color: #0f766e;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.3px;
+        }
+
+        .faq-item {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #e2efea;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-q {
+            font-weight: 500;
+            color: #134e4a;
+            font-size: 0.95rem;
+        }
+
+        .faq-a {
+            font-size: 0.9rem;
+            color: #3c525e;
+            margin-top: 0.2rem;
+            padding-left: 0.3rem;
+        }
+
+        .faq-a a {
+            color: #0b7c6f;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            text-decoration-thickness: 1px;
+            text-decoration-color: #9ac7bd;
+            font-weight: 500;
+        }
+
+        /* 内置链接样式（句子中的天天盈球） */
+        .text-link {
+            color: #0b7c6f;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1.5px solid #b1d3c9;
+            transition: border-color 0.2s;
+        }
+
+        .text-link:hover {
+            border-bottom-color: #0f766e;
+        }
+
+        /* 底部 */
+        .footer-note {
+            margin-top: 2.5rem;
+            font-size: 0.8rem;
+            color: #6f828b;
+            text-align: center;
+            border-top: 1px solid #d2e2dc;
+            padding-top: 1.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        .footer-note span {
+            color: #16786b;
+        }
+
+        /* 响应式 */
+        @media (min-width: 680px) {
+            body {
+                padding: 1.8rem 2rem 3rem;
+            }
+            .grid-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .info-pair {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 960px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .grid-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .card {
+                padding: 1.8rem;
+            }
+        }
+
+        /* 极窄屏微调 */
+        @media (max-width: 380px) {
+            .hero-sub {
+                font-size: 0.75rem;
+                padding: 0.1rem 0.6rem;
+            }
+            .card h3 {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- hero 区：标题 + 简短定位 -->
+    <div class="hero-tag">
+        <div class="hero-title">天天盈球</div>
+        <div class="hero-sub">赛事数据 · 知识入口</div>
+    </div>
+
+    <!-- 第一印象段落：介绍网站用途，不过度承诺，生活化语言 -->
+    <div style="font-size:1rem; color:#1e3a3f; background:#ecf7f3; padding:0.9rem 1.3rem; border-radius: 40px; margin-bottom: 1.2rem;">
+        🏀 想快速了解一个赛事数据站到底能帮你做什么？下面从几个日常场景展开。
+    </div>
+
+    <!-- 网格卡片 ———— 目录感布局，每个卡片指向一个知识板块 -->
+    <div class="grid-cards">
+        <div class="card">
+            <h3>赛事怎么看</h3>
+            <p>联赛、杯赛、国际赛…… 从主流到小众，大部分赛程和基础数据都能找到对应页面。平时看球前先扫一眼，心里有个底。</p>
+            <div class="badge-list">
+                <span class="badge">比分</span>
+                <span class="badge">赛程</span>
+                <span class="badge">排名</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3>数据能查什么</h3>
+            <p>历史交锋、近期状态、进球分布、红黄牌统计。对于喜欢自己琢磨走势的用户来说，这些数字比感觉更靠谱。</p>
+            <div class="badge-list">
+                <span class="badge">交锋</span>
+                <span class="badge">统计</span>
+                <span class="badge">走势</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3>适合哪些人用</h3>
+            <ul>
+                <li>日常看球、想快速查数据的球迷</li>
+                <li>喜欢对比球队近期状态的爱好者</li>
+                <li>做简单赛事笔记或内容参考的用户</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>信息呈现风格</h3>
+            <p>页面直接，不需要注册就能浏览大部分内容。数据以表格和简洁列表为主，没有太多复杂跳转。</p>
+        </div>
+        <div class="card">
+            <h3>移动端体验</h3>
+            <p>手机浏览器直接打开就能用，排版针对竖屏优化，赛程和比分在手掌大小下也能看清。</p>
+        </div>
+        <div class="card">
+            <h3>更新节奏</h3>
+            <p>赛前、赛中、赛后都有动态刷新，但具体更新频率依赛事不同略有差异。建议以页面显示时间为准。</p>
+        </div>
+    </div>
+
+    <!-- 说明区 + 提示区 双列 (info-pair) -->
+    <div class="info-pair">
+        <div class="info-block">
+            <h4>📋 说明 <span>ABOUT</span></h4>
+            <p><a href="https://zhcn-ttyq.com" class="text-link">天天盈球</a> 是一个面向中文用户的赛事数据站点，内容覆盖足球、篮球等多项运动的赛程、实时比分、历史统计。团队持续维护数据源，保证信息相对准确。如果你正计划深入了解某支球队的近况，或者想回顾一场比赛的细节，从这里开始会比较直接。</p>
+            <div class="small-note">数据仅供参考，以实际比赛情况为准。</div>
+        </div>
+        <div class="info-block">
+            <h4>💡 提示 <span>TIPS</span></h4>
+            <p>首次使用可以试试搜索你关注的联赛名称，或者直接点击首页热门赛事模块。大部分页面都支持按日期、轮次筛选。如果在手机上看，横屏显示能展示更多数据列。</p>
+            <div class="small-note">遇到加载缓慢时，可以尝试刷新或检查网络。</div>
+        </div>
+    </div>
+
+    <!-- 相关信息区 + FAQ 摘要（混合） -->
+    <div class="faq-mini">
+        <h5>📌 相关信息 · 几个常见疑问</h5>
+        <div class="faq-item">
+            <div class="faq-q">🔹 数据覆盖哪些联赛？</div>
+            <div class="faq-a">欧洲主流联赛、亚洲部分赛事、主要杯赛以及 NBA、欧篮等。具体列表可以在网站「联赛」板块看到。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">🔹 我需要注册才能用吗？</div>
+            <div class="faq-a">浏览大部分数据不需要注册。少数功能（如收藏、历史记录）可能需要登录，但核心内容对访客开放。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">🔹 如何快速找到某支球队的数据？</div>
+            <div class="faq-a">使用页面顶部搜索框，输入球队名称（中文或英文均可）。也可以先进入对应联赛，再筛选球队。对于刚接触的用户，建议先从热门赛事板块入手。</div>
+        </div>
+        <div class="faq-item" style="border-bottom: none;">
+            <div class="faq-q">🔹 数据的准确性怎么样？</div>
+            <div class="faq-a">数据来源有多渠道比对，但体育赛事信息繁杂，偶尔有可能延迟或错漏。如果发现明显问题，可以通过网站反馈渠道告知。更多细节可前往 <a href="https://zhcn-ttyq.com">天天盈球</a> 了解。</div>
+        </div>
+    </div>
+
+    <!-- 一条场景式的句子，嵌入链接 (句子自然，没有进入/点击) -->
+    <div style="background: #e1f0ea; border-radius: 50px; padding: 0.7rem 1.2rem; margin: 1.8rem 0; font-size: 0.95rem; color: #14534b;">
+        🧭 比如你想查今晚的比赛阵容，或者对比两队过去五次交手记录，直接打开 <a href="https://zhcn-ttyq.com" class="text-link">天天盈球</a> 就能找到对应栏目，省去东翻西找的麻烦。
+    </div>
+
+    <!-- 底部 -->
+    <div class="footer-note">
+        <span>天天盈球</span> · 赛事数据知识入口 · 内容仅供参考
+    </div>
+
+</div>
+</body>
+</html>
